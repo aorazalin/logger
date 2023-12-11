@@ -28,6 +28,22 @@ class TestLogComponent(unittest.TestCase):
         with open(expected_filename, "r") as file:
             file_contents = file.read()
             self.assertIn(message, file_contents)
+    
+    def test_new_file_created_when_midnight_crossed(self):
+        """
+        Need to tamper with the timing by mocking
+        the timestamp module to change time to the next time
+        and check if new file will be created
+        """
+        pass
+
+    def test_new_file_created_when_filelimit_exceeded(self):
+        """
+        Need to full up some file to the extend of overflowing the
+        limit and checking if the new file will be created
+        """
+        pass
+
 
 if __name__ == '__main__':
     unittest.main()
