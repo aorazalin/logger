@@ -1,9 +1,7 @@
 import threading
 import os
-import time
 from datetime import datetime
 from queue import Queue
-from typing import Optional
 
 from datetime import datetime
 from abc import ABC, abstractmethod
@@ -18,13 +16,14 @@ class ILog(ABC):
         pass
 
 class LogComponent:
-    def __init__(self, max_file_size: int = 10 * 1024 * 1024):
+    def __init__(self, max_file_size: int = 10 * 1024 * 1024, log_prefix="log_"):
         self.max_file_size = max_file_size
         self.log_queue = Queue()
         self.lock = threading.Lock()
         self.stop_event = threading.Event()
         self.worker_thread = threading.Thread(target=self._worker)
         self.worker_thread.start()
+        self.log_prefix = log_prefix
 
     def write(self, message: str):
         current_time = datetime.now()
@@ -59,7 +58,7 @@ class LogComponent:
                 self._rotate_file(filename)
 
     def _get_filename(self, timestamp: datetime) -> str:
-        return f"log_{timestamp.strftime('%Y%m%d')}.txt"
+        return f"{self.log_prefix}{timestamp.strftime('%Y%m%d')}.txt"
 
     def _rotate_file(self, filename: str):
         i = 1
